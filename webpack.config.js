@@ -20,11 +20,6 @@ let config = {
         loader: "awesome-typescript-loader"
       },
       {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: "babel-loader"
-      },
-      {
         test: /\.(png|jpg|gif)$/i,
         use: [
           {
