@@ -102,14 +102,13 @@ class Carousel extends Component<IProps, IState> {
     window.clearTimeout(this.goToIn);
   }
 
-  neighbourSlideIndex = (direction: -1 | 0 | 1): number => {
-    const residue: number = this.props.slides.length;
-    return mod(this.state.index + direction, residue);
+  modBySlidesLength = (index: number): number => {
+    return mod(index, this.props.slides.length);
   };
 
   moveSlide = (direction: -1 | 1) => {
     this.setState({
-      index: this.neighbourSlideIndex(direction),
+      index: this.modBySlidesLength(this.state.index + direction),
       goToSlide: null
     });
   };
@@ -138,27 +137,16 @@ class Carousel extends Component<IProps, IState> {
 
     if (goToSlide !== index) {
       let direction = this.getShortestDirection(index, goToSlide);
-      const isFinished = this.neighbourSlideIndex(direction) === goToSlide;
+      const isFinished =
+        this.modBySlidesLength(index + direction) === goToSlide;
 
       this.setState({
-        index: this.neighbourSlideIndex(direction),
+        index: this.modBySlidesLength(index + direction),
         newSlide: isFinished,
         goToSlide: isFinished ? null : goToSlide
       });
     }
   };
-
-  getPresentableSlides(slidesData: Slide[], index: number): Slide[] {
-    let { offsetRadius } = this.props;
-    offsetRadius = this.clampOffsetRadius(offsetRadius);
-    const presentableSlides: Slide[] = new Array();
-
-    for (let i = -offsetRadius; i < 1 + offsetRadius; i++) {
-      presentableSlides.push(slidesData[mod(index + i, slidesData.length)]);
-    }
-
-    return presentableSlides;
-  }
 
   clampOffsetRadius(offsetRadius: number): number {
     const { slides } = this.props;
@@ -174,14 +162,22 @@ class Carousel extends Component<IProps, IState> {
     return offsetRadius;
   }
 
-  render() {
-    const {
-      slides,
-      animationConfig,
-      offsetRadius,
-      showNavigation
-    } = this.props;
+  getPresentableSlides(): Slide[] {
+    const { slides } = this.props;
     const { index } = this.state;
+    let { offsetRadius } = this.props;
+    offsetRadius = this.clampOffsetRadius(offsetRadius);
+    const presentableSlides: Slide[] = new Array();
+
+    for (let i = -offsetRadius; i < 1 + offsetRadius; i++) {
+      presentableSlides.push(slides[this.modBySlidesLength(index + i)]);
+    }
+
+    return presentableSlides;
+  }
+
+  render() {
+    const { animationConfig, offsetRadius, showNavigation } = this.props;
 
     let navigationButtons = null;
     if (showNavigation) {
@@ -201,19 +197,20 @@ class Carousel extends Component<IProps, IState> {
         </NavigationButtons>
       );
     }
-    let presentableSlides = this.getPresentableSlides(slides, index);
     return (
       <React.Fragment>
         <Wrapper>
-          {presentableSlides.map((slide: Slide, presentableIndex: number) => (
-            <Slide
-              key={slide.key}
-              content={slide.content}
-              offsetRadius={this.clampOffsetRadius(offsetRadius)}
-              index={presentableIndex}
-              animationConfig={animationConfig}
-            />
-          ))}
+          {this.getPresentableSlides().map(
+            (slide: Slide, presentableIndex: number) => (
+              <Slide
+                key={slide.key}
+                content={slide.content}
+                offsetRadius={this.clampOffsetRadius(offsetRadius)}
+                index={presentableIndex}
+                animationConfig={animationConfig}
+              />
+            )
+          )}
         </Wrapper>
         {navigationButtons}
       </React.Fragment>
