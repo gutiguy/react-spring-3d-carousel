@@ -56,15 +56,15 @@ const slides = [
   },
   {
     key: uuidv4(),
-    content: <img src="https://picsum.photos/500/800/?random" alt="5" />
+    content: <img src="https://picsum.photos/500/800/?random" alt="6" />
   },
   {
     key: uuidv4(),
-    content: <img src="https://picsum.photos/800/600/?random" alt="5" />
+    content: <img src="https://picsum.photos/800/600/?random" alt="7" />
   },
   {
     key: uuidv4(),
-    content: <img src="https://picsum.photos/800/800/?random" alt="5" />
+    content: <img src="https://picsum.photos/800/800/?random" alt="8" />
   }
 ];
 
