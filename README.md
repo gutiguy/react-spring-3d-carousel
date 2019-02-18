@@ -15,13 +15,13 @@ This should go without saying, but if you use this component make sure to test i
 Install it via npm:
 
 ```
-npm i react-3d-spring-carousel
+npm i react-spring-3d-carousel
 ```
 
 or yarn:
 
 ```
-yarn add react-3d-spring-carousel
+yarn add react-spring-3d-carousel
 ```
 
 Then import the Carousel component like so :
