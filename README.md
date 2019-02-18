@@ -27,7 +27,7 @@ yarn add react-spring-3d-carousel
 Then import the Carousel component like so :
 
 ```
-import Carousel from 'react-3d-spring-carousel';
+import Carousel from 'react-spring-3d-carousel';
 ```
 
 The only thing this component needs to run is an array of slides, which are objects with a unique key property and a content property containing an image instance :
