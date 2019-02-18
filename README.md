@@ -15,19 +15,19 @@ This should go without saying, but if you use this component make sure to test i
 Install it via npm:
 
 ```
-npm i react-3d-spring-carousel
+npm i react-spring-3d-carousel
 ```
 
 or yarn:
 
 ```
-yarn add react-3d-spring-carousel
+yarn add react-spring-3d-carousel
 ```
 
 Then import the Carousel component like so :
 
 ```
-import Carousel from 'react-3d-spring-carousel';
+import Carousel from 'react-spring-3d-carousel';
 ```
 
 The only thing this component needs to run is an array of slides, which are objects with a unique key property and a content property containing an image instance :
