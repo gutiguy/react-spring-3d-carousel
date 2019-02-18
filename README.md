@@ -1,4 +1,4 @@
-# react-3d-spring-carousel
+# react-spring-3d-carousel
 
 A 3D Carousel component for images built with [React](https://reactjs.org/) and utilizing [react-spring](https://github.com/react-spring/react-spring) for controlling slide transitions.
 It's primarily meant to be controlled via the goToSlide prop but I also provided a showNavigation prop if you don't feel like making your own navigation.
