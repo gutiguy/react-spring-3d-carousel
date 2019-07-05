@@ -89,17 +89,19 @@ class Carousel extends Component<IProps, IState> {
     if (typeof goToSlide === "number") {
       if (newSlide) {
         this.handleGoToSlide();
-      } else if (index !== goToSlide) {
-        clearTimeout(this.goToIn);
+      } else if (index !== goToSlide && typeof window !== "undefined") {
+        window.clearTimeout(this.goToIn);
         this.goToIn = window.setTimeout(this.handleGoToSlide, GOTO_INTERVAL);
-      } else {
+      } else if (typeof window !== "undefined") {
         window.clearTimeout(this.goToIn);
       }
     }
   }
 
   componentWillUnmount() {
-    window.clearTimeout(this.goToIn);
+    if (typeof window !== "undefined") {
+      window.clearTimeout(this.goToIn);
+    }
   }
 
   modBySlidesLength = (index: number): number => {
