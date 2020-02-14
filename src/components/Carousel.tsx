@@ -207,6 +207,7 @@ class Carousel extends Component<IProps, IState> {
               <Slide
                 key={slide.key}
                 content={slide.content}
+                onClick={slide.onClick}
                 offsetRadius={this.clampOffsetRadius(offsetRadius)}
                 index={presentableIndex}
                 animationConfig={animationConfig}

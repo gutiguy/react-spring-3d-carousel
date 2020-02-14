@@ -20,6 +20,7 @@ const SlideContainer = styled.div`
 
 interface IProps {
   content: JSX.Element;
+  onClick?: () => void;
   offsetRadius: number;
   index: number;
   animationConfig: object;
@@ -29,7 +30,8 @@ export default function Slide({
   content,
   offsetRadius,
   index,
-  animationConfig
+  animationConfig,
+  onClick
 }: IProps) {
   const offsetFromCenter = index - offsetRadius;
   const totalPresentables = 2 * offsetRadius + 1;
@@ -67,6 +69,7 @@ export default function Slide({
       {style => (
         <SlideContainer
           style={{ ...style, zIndex: Math.abs(Math.abs(offsetFromCenter) - 2) }}
+          onClick={onClick}
         >
           {content}
         </SlideContainer>

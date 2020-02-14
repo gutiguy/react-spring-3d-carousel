@@ -3,41 +3,6 @@ import Carousel from "../components/Carousel";
 import uuidv4 from "uuid";
 import { config } from "react-spring";
 
-let slides: Slide[] = [
-  {
-    key: uuidv4(),
-    content: <img src="https://picsum.photos/800/801/?random" alt="1" />
-  },
-  {
-    key: uuidv4(),
-    content: <img src="https://picsum.photos/800/802/?random" alt="2" />
-  },
-  {
-    key: uuidv4(),
-    content: <img src="https://picsum.photos/600/803/?random" alt="3" />
-  },
-  {
-    key: uuidv4(),
-    content: <img src="https://picsum.photos/800/500/?random" alt="4" />
-  },
-  {
-    key: uuidv4(),
-    content: <img src="https://picsum.photos/800/804/?random" alt="6" />
-  },
-  {
-    key: uuidv4(),
-    content: <img src="https://picsum.photos/500/800/?random" alt="7" />
-  },
-  {
-    key: uuidv4(),
-    content: <img src="https://picsum.photos/800/600/?random" alt="8" />
-  },
-  {
-    key: uuidv4(),
-    content: <img src="https://picsum.photos/805/800/?random" alt="9" />
-  }
-];
-
 export default class Example extends Component {
   state = {
     goToSlide: 0,
@@ -45,6 +10,43 @@ export default class Example extends Component {
     showNavigation: true,
     config: config.gentle
   };
+
+  slides: Slide[] = [
+    {
+      key: uuidv4(),
+      content: <img src="https://picsum.photos/800/801/?random" alt="1" />
+    },
+    {
+      key: uuidv4(),
+      content: <img src="https://picsum.photos/800/802/?random" alt="2" />
+    },
+    {
+      key: uuidv4(),
+      content: <img src="https://picsum.photos/600/803/?random" alt="3" />
+    },
+    {
+      key: uuidv4(),
+      content: <img src="https://picsum.photos/800/500/?random" alt="4" />
+    },
+    {
+      key: uuidv4(),
+      content: <img src="https://picsum.photos/800/804/?random" alt="6" />
+    },
+    {
+      key: uuidv4(),
+      content: <img src="https://picsum.photos/500/800/?random" alt="7" />
+    },
+    {
+      key: uuidv4(),
+      content: <img src="https://picsum.photos/800/600/?random" alt="8" />
+    },
+    {
+      key: uuidv4(),
+      content: <img src="https://picsum.photos/805/800/?random" alt="9" />
+    }
+  ].map((slide, index) => {
+    return { ...slide, onClick: () => this.setState({ goToSlide: index }) };
+  });
 
   onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
@@ -56,7 +58,7 @@ export default class Example extends Component {
     return (
       <div style={{ width: "80%", height: "500px", margin: "0 auto" }}>
         <Carousel
-          slides={slides}
+          slides={this.slides}
           goToSlide={this.state.goToSlide}
           offsetRadius={this.state.offsetRadius}
           showNavigation={this.state.showNavigation}
