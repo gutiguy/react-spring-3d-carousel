@@ -8,7 +8,8 @@ export default class Example extends Component {
     goToSlide: 0,
     offsetRadius: 2,
     showNavigation: true,
-    config: config.gentle
+    config: config.gentle,
+    goToSlideDelay: 200,
   };
 
   slides: Slide[] = [
@@ -60,6 +61,7 @@ export default class Example extends Component {
         <Carousel
           slides={this.slides}
           goToSlide={this.state.goToSlide}
+          goToSlideDelay={this.state.goToSlideDelay}
           offsetRadius={this.state.offsetRadius}
           showNavigation={this.state.showNavigation}
           animationConfig={this.state.config}
@@ -76,6 +78,10 @@ export default class Example extends Component {
           <div>
             <label>Go to slide: </label>
             <input name="goToSlide" onChange={this.onChangeInput} />
+          </div>
+          <div>
+            <label>Go to slide delay: </label>
+            <input name="goToSlideDelay" onChange={this.onChangeInput} />
           </div>
           <div>
             <label>Offset Radius: </label>
