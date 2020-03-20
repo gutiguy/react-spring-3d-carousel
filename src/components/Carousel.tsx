@@ -25,7 +25,7 @@ const NavigationButtons = styled.div`
   }
 `;
 
-const GOTO_INTERVAL = 200;
+const DEFAULT_GO_TO_SLIDE_DELAY = 200;
 
 interface IState {
   index: number;
@@ -40,6 +40,7 @@ interface IProps {
   showNavigation: boolean;
   offsetRadius: number;
   animationConfig: object;
+  goToSlideDelay: number;
 }
 
 function mod(a: number, b: number): number {
@@ -66,12 +67,14 @@ class Carousel extends Component<IProps, IState> {
     goToSlide: PropTypes.number,
     showNavigation: PropTypes.bool,
     offsetRadius: PropTypes.number,
-    animationConfig: PropTypes.object
+    animationConfig: PropTypes.object,
+    goToSlideDelay: PropTypes.number,
   };
 
   static defaultProps = {
     offsetRadius: 2,
-    animationConfig: { tension: 120, friction: 14 }
+    animationConfig: { tension: 120, friction: 14 },
+    goToSlideDelay: DEFAULT_GO_TO_SLIDE_DELAY,
   };
 
   static getDerivedStateFromProps(props: IProps, state: IState) {
@@ -85,13 +88,14 @@ class Carousel extends Component<IProps, IState> {
   }
 
   componentDidUpdate() {
+    const { goToSlideDelay } = this.props;
     const { index, goToSlide, newSlide } = this.state;
     if (typeof goToSlide === "number") {
       if (newSlide) {
         this.handleGoToSlide();
       } else if (index !== goToSlide && typeof window !== "undefined") {
         window.clearTimeout(this.goToIn);
-        this.goToIn = window.setTimeout(this.handleGoToSlide, GOTO_INTERVAL);
+        this.goToIn = window.setTimeout(this.handleGoToSlide, goToSlideDelay);
       } else if (typeof window !== "undefined") {
         window.clearTimeout(this.goToIn);
       }
