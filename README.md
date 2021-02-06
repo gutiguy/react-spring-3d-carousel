@@ -7,7 +7,6 @@ This should go without saying, but if you use this component make sure to test i
 
 ## Example
 
-![](react-spring-3d-carousel-example.gif)  
 [![Edit react-spring-3d-carousel-basic-example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1v96j74484?view=preview)
 
 ## Installation and usage
