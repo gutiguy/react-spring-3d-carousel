@@ -24,6 +24,7 @@ interface IProps {
   offsetRadius: number;
   index: number;
   animationConfig: object;
+  opacity: number;
 }
 
 export default function Slide({
@@ -31,7 +32,8 @@ export default function Slide({
   offsetRadius,
   index,
   animationConfig,
-  onClick
+  onClick,
+  opacity,
 }: IProps) {
   const offsetFromCenter = index - offsetRadius;
   const totalPresentables = 2 * offsetRadius + 1;
@@ -62,11 +64,11 @@ export default function Slide({
         left: `${
           offsetRadius === 0 ? 50 : 50 + (offsetFromCenter * 50) / offsetRadius
         }%`,
-        opacity: distanceFactor * distanceFactor
+        opacity: opacity,
       }}
       config={animationConfig}
     >
-      {style => (
+      {(style) => (
         <SlideContainer
           style={{ ...style, zIndex: Math.abs(Math.abs(offsetFromCenter) - 2) }}
           onClick={onClick}
