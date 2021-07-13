@@ -41,6 +41,9 @@ interface IProps {
   offsetRadius: number;
   animationConfig: object;
   goToSlideDelay: number;
+  opacity: number;
+  autoPlay: boolean;
+  interval: number;
 }
 
 function mod(a: number, b: number): number {
@@ -52,7 +55,7 @@ class Carousel extends Component<IProps, IState> {
     index: 0,
     goToSlide: null,
     prevPropsGoToSlide: 0,
-    newSlide: false
+    newSlide: false,
   };
 
   goToIn?: number;
@@ -61,7 +64,7 @@ class Carousel extends Component<IProps, IState> {
     slides: PropTypes.arrayOf(
       PropTypes.shape({
         key: PropTypes.any,
-        content: PropTypes.object
+        content: PropTypes.object,
       })
     ).isRequired,
     goToSlide: PropTypes.number,
@@ -69,12 +72,18 @@ class Carousel extends Component<IProps, IState> {
     offsetRadius: PropTypes.number,
     animationConfig: PropTypes.object,
     goToSlideDelay: PropTypes.number,
+    opacity: PropTypes.number,
+    autoPlay: PropTypes.bool,
+    interval: PropTypes.number,
   };
 
   static defaultProps = {
     offsetRadius: 2,
     animationConfig: { tension: 120, friction: 14 },
     goToSlideDelay: DEFAULT_GO_TO_SLIDE_DELAY,
+    opacity: null,
+    autoPlay: false,
+    interval: 1,
   };
 
   static getDerivedStateFromProps(props: IProps, state: IState) {
@@ -85,6 +94,15 @@ class Carousel extends Component<IProps, IState> {
     }
 
     return null;
+  }
+
+  componentDidMount() {
+    const { autoPlay, interval } = this.props;
+    if (autoPlay) {
+      setInterval(() => {
+        this.moveSlide(1);
+      }, interval * 1000);
+    }
   }
 
   componentDidUpdate() {
@@ -115,7 +133,7 @@ class Carousel extends Component<IProps, IState> {
   moveSlide = (direction: -1 | 1) => {
     this.setState({
       index: this.modBySlidesLength(this.state.index + direction),
-      goToSlide: null
+      goToSlide: null,
     });
   };
 
@@ -149,7 +167,7 @@ class Carousel extends Component<IProps, IState> {
       this.setState({
         index: this.modBySlidesLength(index + direction),
         newSlide: isFinished,
-        goToSlide: isFinished ? null : goToSlide
+        goToSlide: isFinished ? null : goToSlide,
       });
     }
   };
@@ -183,7 +201,8 @@ class Carousel extends Component<IProps, IState> {
   }
 
   render() {
-    const { animationConfig, offsetRadius, showNavigation } = this.props;
+    const { animationConfig, offsetRadius, showNavigation, opacity } =
+      this.props;
 
     let navigationButtons = null;
     if (showNavigation) {
@@ -215,6 +234,7 @@ class Carousel extends Component<IProps, IState> {
                 offsetRadius={this.clampOffsetRadius(offsetRadius)}
                 index={presentableIndex}
                 animationConfig={animationConfig}
+                opacity={opacity}
               />
             )
           )}
