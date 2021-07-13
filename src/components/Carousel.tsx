@@ -81,7 +81,7 @@ class Carousel extends Component<IProps, IState> {
     offsetRadius: 2,
     animationConfig: { tension: 120, friction: 14 },
     goToSlideDelay: DEFAULT_GO_TO_SLIDE_DELAY,
-    opacity: 0.4,
+    opacity: null,
     autoPlay: false,
     interval: 1,
   };
@@ -96,8 +96,17 @@ class Carousel extends Component<IProps, IState> {
     return null;
   }
 
+  componentDidMount() {
+    const { autoPlay, interval } = this.props;
+    if (autoPlay) {
+      setInterval(() => {
+        this.moveSlide(1);
+      }, interval * 1000);
+    }
+  }
+
   componentDidUpdate() {
-    const { goToSlideDelay, autoPlay } = this.props;
+    const { goToSlideDelay } = this.props;
     const { index, goToSlide, newSlide } = this.state;
     if (typeof goToSlide === "number") {
       if (newSlide) {
@@ -109,9 +118,6 @@ class Carousel extends Component<IProps, IState> {
         window.clearTimeout(this.goToIn);
       }
     }
-    if (autoPlay) {
-      this.withInterval();
-    }
   }
 
   componentWillUnmount() {
@@ -119,15 +125,6 @@ class Carousel extends Component<IProps, IState> {
       window.clearTimeout(this.goToIn);
     }
   }
-
-  withInterval = () => {
-    const { interval } = this.props;
-    while (1) {
-      setInterval(() => {
-        this.moveSlide(1);
-      }, interval * 1000);
-    }
-  };
 
   modBySlidesLength = (index: number): number => {
     return mod(index, this.props.slides.length);

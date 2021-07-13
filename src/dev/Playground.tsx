@@ -12,6 +12,7 @@ export default class Example extends Component {
     goToSlideDelay: 200,
     autoPlay: true,
     inteval: 2,
+    opacity: 1,
   };
 
   slides: Slide[] = [
@@ -69,6 +70,7 @@ export default class Example extends Component {
           animationConfig={this.state.config}
           autoPlay={this.state.autoPlay}
           interval={this.state.inteval}
+          opacity={this.state.opacity}
         />
         <div
           style={{
