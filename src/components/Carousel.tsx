@@ -32,6 +32,7 @@ interface IState {
   goToSlide: number | null;
   prevPropsGoToSlide: number;
   newSlide: boolean;
+  intervalId: number | null;
 }
 
 interface IProps {
@@ -41,6 +42,8 @@ interface IProps {
   offsetRadius: number;
   animationConfig: object;
   goToSlideDelay: number;
+  autoplay: boolean;
+  interval: number;
 }
 
 function mod(a: number, b: number): number {
@@ -52,7 +55,8 @@ class Carousel extends Component<IProps, IState> {
     index: 0,
     goToSlide: null,
     prevPropsGoToSlide: 0,
-    newSlide: false
+    newSlide: false,
+    intervalId: null,
   };
 
   goToIn?: number;
@@ -69,12 +73,16 @@ class Carousel extends Component<IProps, IState> {
     offsetRadius: PropTypes.number,
     animationConfig: PropTypes.object,
     goToSlideDelay: PropTypes.number,
+    autoplay: PropTypes.bool,
+    interval: PropTypes.number
   };
 
   static defaultProps = {
     offsetRadius: 2,
     animationConfig: { tension: 120, friction: 14 },
     goToSlideDelay: DEFAULT_GO_TO_SLIDE_DELAY,
+    autoplay: false,
+    interval: 1000
   };
 
   static getDerivedStateFromProps(props: IProps, state: IState) {
@@ -85,6 +93,15 @@ class Carousel extends Component<IProps, IState> {
     }
 
     return null;
+  }
+
+  componentDidMount() {
+    const { autoplay, interval } = this.props;
+    if (autoplay) {
+      this.state.intervalId = setInterval(() => {
+        this.moveSlide(1);
+      }, interval);
+    }
   }
 
   componentDidUpdate() {
@@ -103,6 +120,9 @@ class Carousel extends Component<IProps, IState> {
   }
 
   componentWillUnmount() {
+    if(this.state.intervalId) {
+      clearInterval(this.state.intervalId);
+    }
     if (typeof window !== "undefined") {
       window.clearTimeout(this.goToIn);
     }

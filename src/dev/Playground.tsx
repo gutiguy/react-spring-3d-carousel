@@ -10,6 +10,8 @@ export default class Example extends Component {
     showNavigation: true,
     config: config.gentle,
     goToSlideDelay: 200,
+    autoplay: true,
+    interval: 2,
   };
 
   slides: Slide[] = [
@@ -65,6 +67,8 @@ export default class Example extends Component {
           offsetRadius={this.state.offsetRadius}
           showNavigation={this.state.showNavigation}
           animationConfig={this.state.config}
+          autoplay={this.state.autoplay}
+          interval={this.state.interval}
         />
         <div
           style={{
