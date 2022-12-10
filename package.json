@@ -24,8 +24,8 @@
     "react-spring": "^8.0.5"
   },
   "peerDependencies": {
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "react": "^16.7.0 || ^17 || ^18",
+    "react-dom": "^16.7.0 || ^17 || ^18"
   },
   "devDependencies": {
     "@types/node": "^10.12.24",
