@@ -93,10 +93,10 @@ class Carousel extends Component<IProps, IState> {
     if (typeof goToSlide === "number") {
       if (newSlide) {
         this.handleGoToSlide();
-      } else if (index !== goToSlide && typeof window !== "undefined") {
+      } else if (index !== goToSlide && window) {
         window.clearTimeout(this.goToIn);
         this.goToIn = window.setTimeout(this.handleGoToSlide, goToSlideDelay);
-      } else if (typeof window !== "undefined") {
+      } else if (window) {
         window.clearTimeout(this.goToIn);
       }
     }
