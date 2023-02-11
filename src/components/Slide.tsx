@@ -81,6 +81,7 @@ export default function Slide({
       offsetRadius === 0 ? 50 : 50 + (offsetFromCenter * 50) / offsetRadius
     }%`;
   }
+
   if (to.opacity === undefined) {
     to.opacity = distanceFactor * distanceFactor;
   }
@@ -89,7 +90,7 @@ export default function Slide({
     <Spring to={to} config={animationConfig}>
       {(style) => (
         <SlideContainer
-          style={{ ...style, zIndex: Math.abs(Math.abs(offsetFromCenter) - 2) }}
+          style={{ ...style, zIndex: Math.abs(Math.abs(offsetFromCenter) - offsetRadius) }}
           onClick={onClick}
         >
           {content}
