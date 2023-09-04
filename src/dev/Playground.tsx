@@ -10,48 +10,49 @@ export default class Example extends Component {
     showNavigation: true,
     config: config.gentle,
     goToSlideDelay: 200,
+    autoPlay: 0,
   };
 
   slides: Slide[] = [
     {
       key: uuidv4(),
-      content: <img src="https://picsum.photos/800/801/?random" alt="1" />
+      content: <img src="https://picsum.photos/800/801/?random" alt="1" />,
     },
     {
       key: uuidv4(),
-      content: <img src="https://picsum.photos/800/802/?random" alt="2" />
+      content: <img src="https://picsum.photos/800/802/?random" alt="2" />,
     },
     {
       key: uuidv4(),
-      content: <img src="https://picsum.photos/600/803/?random" alt="3" />
+      content: <img src="https://picsum.photos/600/803/?random" alt="3" />,
     },
     {
       key: uuidv4(),
-      content: <img src="https://picsum.photos/800/500/?random" alt="4" />
+      content: <img src="https://picsum.photos/800/500/?random" alt="4" />,
     },
     {
       key: uuidv4(),
-      content: <img src="https://picsum.photos/800/804/?random" alt="6" />
+      content: <img src="https://picsum.photos/800/804/?random" alt="6" />,
     },
     {
       key: uuidv4(),
-      content: <img src="https://picsum.photos/500/800/?random" alt="7" />
+      content: <img src="https://picsum.photos/500/800/?random" alt="7" />,
     },
     {
       key: uuidv4(),
-      content: <img src="https://picsum.photos/800/600/?random" alt="8" />
+      content: <img src="https://picsum.photos/800/600/?random" alt="8" />,
     },
     {
       key: uuidv4(),
-      content: <img src="https://picsum.photos/805/800/?random" alt="9" />
-    }
+      content: <img src="https://picsum.photos/805/800/?random" alt="9" />,
+    },
   ].map((slide, index) => {
     return { ...slide, onClick: () => this.setState({ goToSlide: index }) };
   });
 
   onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      [e.target.name]: parseInt(e.target.value, 10) || 0
+      [e.target.name]: parseInt(e.target.value, 10) || 0,
     });
   };
 
@@ -65,6 +66,7 @@ export default class Example extends Component {
           offsetRadius={this.state.offsetRadius}
           showNavigation={this.state.showNavigation}
           animationConfig={this.state.config}
+          autoPlay={this.state.autoPlay}
         />
         <div
           style={{
@@ -72,7 +74,7 @@ export default class Example extends Component {
             marginTop: "2rem",
             width: "50%",
             display: "flex",
-            justifyContent: "space-around"
+            justifyContent: "space-around",
           }}
         >
           <div>
@@ -86,6 +88,10 @@ export default class Example extends Component {
           <div>
             <label>Offset Radius: </label>
             <input name="offsetRadius" onChange={this.onChangeInput} />
+          </div>
+          <div>
+            <label>Auto Play: </label>
+            <input name="autoPlay" onChange={this.onChangeInput} />
           </div>
           <div>
             <label>Show navigation: </label>
