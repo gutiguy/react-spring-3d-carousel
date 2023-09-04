@@ -28,15 +28,16 @@ const NavigationButtons = styled.div`
 const DEFAULT_GO_TO_SLIDE_DELAY = 200;
 
 export type OffsetFn = (
-    offsetFromCenter: number,
-    index: number
-  ) => { transform?: string; left?: string | number; opacity?: number };
+  offsetFromCenter: number,
+  index: number
+) => { transform?: string; left?: string | number; opacity?: number };
 
 interface IState {
   index: number;
   goToSlide: number | null;
   prevPropsGoToSlide: number;
   newSlide: boolean;
+  mouseIn: boolean;
 }
 
 interface IProps {
@@ -46,7 +47,8 @@ interface IProps {
   offsetRadius: number;
   animationConfig: object;
   goToSlideDelay: number;
-  offsetFn?: OffsetFn
+  autoPlay?: number;
+  offsetFn?: OffsetFn;
 }
 
 function mod(a: number, b: number): number {
@@ -59,9 +61,11 @@ class Carousel extends Component<IProps, IState> {
     goToSlide: null,
     prevPropsGoToSlide: 0,
     newSlide: false,
+    mouseIn: false,
   };
 
   goToIn?: number;
+  autoInterval?: any;
 
   static propTypes = {
     slides: PropTypes.arrayOf(
@@ -76,6 +80,7 @@ class Carousel extends Component<IProps, IState> {
     animationConfig: PropTypes.object,
     goToSlideDelay: PropTypes.number,
     offsetFn: PropTypes.func,
+    autoPlay: PropTypes.number,
   };
 
   static defaultProps = {
@@ -95,7 +100,7 @@ class Carousel extends Component<IProps, IState> {
   }
 
   componentDidUpdate() {
-    const { goToSlideDelay } = this.props;
+    const { goToSlideDelay, autoPlay } = this.props;
     const { index, goToSlide, newSlide } = this.state;
     if (typeof goToSlide === "number") {
       if (newSlide) {
@@ -107,12 +112,28 @@ class Carousel extends Component<IProps, IState> {
         window.clearTimeout(this.goToIn);
       }
     }
+    if (autoPlay && !this.state.mouseIn) {
+      if (!this.autoInterval)
+        this.autoInterval = setInterval(() => this.moveSlide(1), autoPlay);
+    } else {
+      clearInterval(this.autoInterval);
+      this.autoInterval = null;
+    }
+  }
+
+  componentDidMount(): void {
+    const { autoPlay } = this.props;
+    if (autoPlay && !this.state.mouseIn && !this.autoInterval) {
+      this.autoInterval = setInterval(() => this.moveSlide(1), autoPlay);
+    }
   }
 
   componentWillUnmount() {
     if (typeof window !== "undefined") {
       window.clearTimeout(this.goToIn);
     }
+    clearInterval(this.autoInterval);
+    this.autoInterval = null;
   }
 
   modBySlidesLength = (index: number): number => {
@@ -190,7 +211,8 @@ class Carousel extends Component<IProps, IState> {
   }
 
   render() {
-    const { animationConfig, offsetRadius, showNavigation, offsetFn } = this.props;
+    const { animationConfig, offsetRadius, showNavigation, offsetFn } =
+      this.props;
 
     let navigationButtons = null;
     if (showNavigation) {
@@ -212,7 +234,10 @@ class Carousel extends Component<IProps, IState> {
     }
     return (
       <React.Fragment>
-        <Wrapper>
+        <Wrapper
+          onMouseEnter={() => this.setState((s) => ({ ...s, mouseIn: true }))}
+          onMouseLeave={() => this.setState((s) => ({ ...s, mouseIn: false }))}
+        >
           {this.getPresentableSlides().map(
             (slide: Slide, presentableIndex: number) => (
               <Slide
