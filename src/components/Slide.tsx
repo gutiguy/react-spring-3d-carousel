@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Spring } from "react-spring/renderprops";
+import { OffsetFn } from "./Carousel";
 
 const SlideContainer = styled.div`
   position: absolute;
@@ -36,9 +37,15 @@ export default function Slide({
   opacity,
 }: IProps) {
   const offsetFromCenter = index - offsetRadius;
-  const totalPresentables = 2 * offsetRadius + 1;
-  const distanceFactor = 1 - Math.abs(offsetFromCenter / (offsetRadius + 1));
+  offsetFn?: OffsetFn
+}
 
+const getDefaultTranslateX = (
+  offsetFromCenter: number,
+  offsetRadius: number,
+  index: number
+) => {
+  const totalPresentables = 2 * offsetRadius + 1;
   const translateXoffset =
     50 * (Math.abs(offsetFromCenter) / (offsetRadius + 1));
   let translateX = -50;
@@ -56,6 +63,40 @@ export default function Slide({
   } else if (offsetFromCenter < 0) {
     translateX -= translateXoffset;
   }
+  return translateX;
+};
+
+export default function Slide({
+  content,
+  offsetRadius,
+  index,
+  animationConfig,
+  onClick,
+  offsetFn,
+}: IProps) {
+  const offsetFromCenter = index - offsetRadius;
+  const distanceFactor = 1 - Math.abs(offsetFromCenter / (offsetRadius + 1));
+
+  let to = offsetFn?.(offsetFromCenter, index) || {};
+
+  if (to.transform === undefined) {
+    const translateX = getDefaultTranslateX(
+      offsetFromCenter,
+      offsetRadius,
+      index,
+    );
+    to.transform = `translateY(-50%) translateX(${translateX}%) scale(${distanceFactor})`;
+  }
+
+  if (to.left === undefined) {
+    to.left = `${
+      offsetRadius === 0 ? 50 : 50 + (offsetFromCenter * 50) / offsetRadius
+    }%`;
+  }
+
+  if (to.opacity === undefined) {
+    to.opacity = distanceFactor * distanceFactor;
+  }
 
   return (
     <Spring
@@ -68,9 +109,10 @@ export default function Slide({
       }}
       config={animationConfig}
     >
+    <Spring to={to} config={animationConfig}>
       {(style) => (
         <SlideContainer
-          style={{ ...style, zIndex: Math.abs(Math.abs(offsetFromCenter) - 2) }}
+          style={{ ...style, zIndex: Math.abs(Math.abs(offsetFromCenter) - offsetRadius) }}
           onClick={onClick}
         >
           {content}

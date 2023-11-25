@@ -27,6 +27,11 @@ const NavigationButtons = styled.div`
 
 const DEFAULT_GO_TO_SLIDE_DELAY = 200;
 
+export type OffsetFn = (
+    offsetFromCenter: number,
+    index: number
+  ) => { transform?: string; left?: string | number; opacity?: number };
+
 interface IState {
   index: number;
   goToSlide: number | null;
@@ -44,6 +49,8 @@ interface IProps {
   opacity: number;
   autoPlay: boolean;
   interval: number;
+
+  offsetFn?: OffsetFn
 }
 
 function mod(a: number, b: number): number {
@@ -75,6 +82,7 @@ class Carousel extends Component<IProps, IState> {
     opacity: PropTypes.number,
     autoPlay: PropTypes.bool,
     interval: PropTypes.number,
+    offsetFn: PropTypes.func,
   };
 
   static defaultProps = {
@@ -111,10 +119,10 @@ class Carousel extends Component<IProps, IState> {
     if (typeof goToSlide === "number") {
       if (newSlide) {
         this.handleGoToSlide();
-      } else if (index !== goToSlide && typeof window !== "undefined") {
+      } else if (index !== goToSlide && window) {
         window.clearTimeout(this.goToIn);
         this.goToIn = window.setTimeout(this.handleGoToSlide, goToSlideDelay);
-      } else if (typeof window !== "undefined") {
+      } else if (window) {
         window.clearTimeout(this.goToIn);
       }
     }
@@ -201,8 +209,10 @@ class Carousel extends Component<IProps, IState> {
   }
 
   render() {
+
     const { animationConfig, offsetRadius, showNavigation, opacity } =
       this.props;
+    const { animationConfig, offsetRadius, showNavigation, offsetFn } = this.props;
 
     let navigationButtons = null;
     if (showNavigation) {
@@ -235,6 +245,7 @@ class Carousel extends Component<IProps, IState> {
                 index={presentableIndex}
                 animationConfig={animationConfig}
                 opacity={opacity}
+                offsetFn={offsetFn}
               />
             )
           )}
